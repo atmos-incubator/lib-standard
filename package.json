@@ -21,7 +21,7 @@
     "mocha-jsdom": "^2.0.0",
     "nyc": "^14",
     "sinon": "^7.3.2",
-    "lodash": "^4.17.13"
+    "lodash": ">=4.17.13"
   },
   "scripts": {
     "test": "mocha ./test/server.js ./src/**/*-test.js",
