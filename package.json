@@ -1,0 +1,57 @@
+{
+  "name": "@atmos-inc/standard",
+  "description": "A standard library for cross-stack JavaScript",
+  "main": "index.js",
+  "version": "0.0.1",
+  "license": "UNLICENSED",
+  "private": true,
+  "author": {
+    "name": "Marcus Pope",
+    "url": "http://www.marcuspope.com/"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-standard": "^13.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jsdom": "^15.1.1",
+    "mocha": "^5.2.0",
+    "mocha-jsdom": "^2.0.0",
+    "nyc": "^14",
+    "sinon": "^7.3.2"
+  },
+  "scripts": {
+    "test": "mocha ./test/server.js ./src/**/*-test.js",
+    "test:web": "mocha ./test/web.js ./src/**/*-test.js ./src/**/*-test-web.js",
+    "perf": "mocha --require ./index.js index-test.js ./src/**/*-perf.js",
+    "coverage": "nyc npm test",
+    "coverage:html": "nyc --reporter=html npm test",
+    "coverage:web": "nyc npm run test:web",
+    "coverage:web:html": "nyc --reporter=html npm run test:web",
+    "lint": "eslint src/**",
+    "preflight": "npm test && npm run perf && npm run coverage && npm run lint && echo ALL GOOD"
+  },
+  "dependencies": {
+    "uuid": "^3.3.2"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "skip-full": false,
+    "branches": 100,
+    "lines": 100,
+    "functions": 100,
+    "statements": 100,
+    "exclude": [
+      "coverage/**",
+      "**/*-test.js",
+      "**/*-test-web.js",
+      "**/*-perf.js",
+      "**/test.js"
+    ]
+  },
+  "eslintIgnore": [
+    "*.md"
+  ]
+}
