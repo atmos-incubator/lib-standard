@@ -147,11 +147,13 @@
                 // @TODO: make ea.def(a) handle an array with pushOnce logic
                 // @TODO: make ea.concat(a) combine arrays
 
-                if (res != undefined) ary.push(res);
+                // @TODO: Allow ea.undef() and ea.exit.undef() to include undefined values in the result so that map
+                // operations are compatible with
+                if (res !== undefined) ary.push(res);
               } catch (e) {
                 if (e.merge === true) {
                   // use of e.merge() triggers response object return
-                  obj = obj != undefined ? obj : ea({});
+                  obj = obj !== undefined ? obj : ea({});
 
                   // support ea.exit(k, v) and ea.exit({ k: v });
                   if (e.k) {
