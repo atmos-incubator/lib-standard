@@ -7,7 +7,7 @@ describe('Bootstrap', () => {
     const data = [1, null, ' ok'];
     assert.similar(data.prefix('hi '), ['hi 1', null, 'hi  ok']);
     assert.similar(data.ltrim(), [1, null, 'ok']);
-    alert(data.replace('s', ''));
+    assert.similar(data.replace(' ok', '').trim(), [1, null, '']);
   });
 
   it('parlays new features to Arrays as well', () => {
