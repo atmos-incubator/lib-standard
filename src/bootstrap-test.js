@@ -4,7 +4,17 @@ describe('Bootstrap', () => {
   });
 
   it('parlays string functions to arrays', () => {
-    assert.similar(['test', 1, 'ok'].prefix('hi '), ['hi test', 1, 'hi ok']);
+    const data = [1, null, ' ok'];
+    assert.similar(data.prefix('hi '), ['hi 1', null, 'hi  ok']);
+    assert.similar(data.ltrim(), [1, null, 'ok']);
+    alert(data.replace('s', ''));
+  });
+
+  it('parlays new features to Arrays as well', () => {
+    Object.proto(String.prototype, 'arrFoo', function() {
+      return this.valueOf();
+    });
+    assert.similar([1, null, 4].arrFoo(), [1, null, 4]);
   });
 
   it('declares a noop()', () => {

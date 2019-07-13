@@ -15,7 +15,8 @@
   // @VAR: guid() - A uuid/v4 generator
   global.guid = () => require('uuid/v4')();
 
-  // for detailed documentation.
+  // @SECTION: lib/standard features - see each <directory>/readme.md for detailed documentation
+
   require('./interact');
   require('./assert');
   require('./object');
@@ -29,9 +30,9 @@
   require('./math');
 
   // Allow scalar prototypes to be applied to each index of an array
-  // @TODO: remove this feature when Object.proto() TODOs are finished
-  // @DOC: allow Object.proto(AP) to override auto-promoted properties to avoid bootstrap load order conflicts.
-  Object.itrProto(String.prototype);
+  Object.proto.toArray(String.prototype);
+  Object.proto.toArray(Number.prototype);
+  Object.proto.toArray(Date.prototype);
 
   // @SECTION: Support for basic lifecycle event subscriptions.
 

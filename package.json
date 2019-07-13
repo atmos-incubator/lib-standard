@@ -2,7 +2,7 @@
   "name": "@atmos-inc/standard",
   "description": "A standard library for cross-stack JavaScript",
   "main": "index.js",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "UNLICENSED",
   "private": true,
   "author": {

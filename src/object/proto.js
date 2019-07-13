@@ -43,8 +43,21 @@
       Object.defineProperty(protoArr[i], str, {
         value: fn,
         writable: true,
-        enumerable: protoArr[i] === Standard.features
+        enumerable: protoArr[i] === Standard.prototype
       });
+
+      // define an array-op property if not already defined
+      if (protoArr[i] === String.prototype && !has(Array.prototype, str)) {
+        Object.defineProperty(Array.prototype, str, {
+          value: function(...args) {
+            return this.ea(v => {
+              return v != null ? fn.apply(String(v), args) : v;
+            });
+          },
+          writable: true,
+          enumerable: protoArr[i] === Standard.prototype
+        });
+      }
     }
   };
 
@@ -61,7 +74,6 @@
 
   Object.protoMap = (protoArr, map) => {
     // Allow the definition of multiple key value pairs {map} on the provided prototypes {protoArr}
-    // @TODO: This should just call Object.proto() for all entires in map
 
     if (map === undefined) {
       map = protoArr;
@@ -74,23 +86,18 @@
 
     for (const proto of protoArr) {
       for (const [k, fn] of Object.entries(map)) {
-        Object.proto.checkArrow(fn, protoArr, k);
-
-        Object.defineProperty(proto, k, {
-          value: fn,
-          writable: true,
-          enumerable: proto === Standard.features
-        });
+        Object.proto(proto, k, fn);
       }
     }
   };
 
-  Object.itrProto = proto => {
-    // @NOTE: This allows for the connection of all string prototype functions to the Array prototype so ['asdf', 'qwer '].trim() returns ['asdf', 'qwer']
-    // @DEPRECATED: Object.proto() will handle this implicitly
+  Object.proto.toArray = proto => {
+    // @DOC: Object.proto.array(String.prototype) allows for the application of all String prototype functions to the
+    // Array prototype.
+    // @EG: ['asdf ', 'qwer '].trim() returns ['asdf', 'qwer']
 
-    // @NOTE: valueOf is not defined on the Array prototype so it's blocked from propagation
-    var ignores = ['valueOf'];
+    // @NOTE: Patching these properties will cause issues, so we block them.
+    var ignores = ['valueOf', 'toJSON'];
 
     ea(Object.getOwnPropertyNames(Array.prototype), v => {
       if (isa(Array.prototype[v], 'function')) {
@@ -102,12 +109,13 @@
       // For every known function on that proto...
       if (!isa(proto[key], 'function')) return;
 
-      // ...that isn't already defined on the dest
+      // ...that isn't already defined on the destination.
       if (ignores.includes(key)) return;
 
       Object.proto(Array.prototype, key, function(...args) {
         return this.ea(v => {
-          return v[key] != null ? v[key].apply(v, args) : v;
+          // @NOTE: The constructor coerces the value into a type the prototype extension can handle.
+          return v != null ? proto[key].apply(proto.constructor(v), args) : v;
         });
       });
     });
