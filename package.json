@@ -2,7 +2,7 @@
   "name": "@atmos-inc/standard",
   "description": "A standard library for cross-stack JavaScript",
   "main": "index.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "UNLICENSED",
   "private": true,
   "author": {
@@ -32,7 +32,7 @@
     "coverage:web": "nyc npm run test:web",
     "coverage:web:html": "nyc --reporter=html npm run test:web",
     "lint": "eslint src/**",
-    "preflight": "npm test && npm run perf && npm run coverage && npm run lint && echo ALL GOOD"
+    "preflight": "npm run perf && npm run coverage && npm run coverage:web && npm run lint && echo ALL GOOD"
   },
   "dependencies": {
     "uuid": "^3.3.2"

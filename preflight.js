@@ -2,6 +2,15 @@ require('./index');
 
 // Enforce pre-commit checks via this script and report to console
 
+// @TODO: ask for a commit message based on this standard: https://www.conventionalcommits.org/en/v1.0.0-beta.4/
+  // @: If `BREAKING CHANGE` exists in the message, bump the Major version
+  // @: Use the previous git commit version so that preflight failures don't keep bumping the number)
+  // @: If msg starts with 'fix:' bump the PATCH.
+  // @: If msg starts with 'feat:' bump the MINOR.
+  // @: List other options before asking for input:
+    // @: feat:, fix:, chore:, docs:, style:, refactor:, perf:, test:, ci:, build:,
+  // @: Define a list of standard scopes we should allow.
+
 // @TODO: check that % of comments to locs > 30% (excluding test files)
   // @NOTE: cloc --exclude-lang=Markdown --progress-rate=10 --csv --not-match-f='-test-?' src
 
