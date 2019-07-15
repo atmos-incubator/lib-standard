@@ -43,3 +43,27 @@ jsdom({
   // @NOTE: This isn't necessary because of the proxied global prototype
   globalize: false
 });
+
+describe('Mocha JSDOM Environment', () => {
+  it('Feels like a real window', () => {
+    // in the JSDOM environment window and global are not the same object, but they feel like it.
+    assert.notEqual(window, global);
+
+    // @NOTE: They don't work with `delete` operator on `global`
+    window.fff = true;
+    delete global.fff;
+    assert(global.fff);
+    assert(window.fff);
+
+    // @NOTE: They do work on the real `window` object
+    delete window.fff;
+    assert.bad(window.fff);
+    assert.bad(global.fff);
+
+    // @NOTE: But globals can be manually cleaned up in tests through assignment to undefined.
+    global.fff = true;
+    assert(window.fff);
+    global.fff = undefined;
+    assert.bad(window.fff);
+  });
+});

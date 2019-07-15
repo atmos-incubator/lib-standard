@@ -2,7 +2,7 @@
   "name": "@atmos-inc/standard",
   "description": "A standard library for cross-stack JavaScript",
   "main": "index.js",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "license": "UNLICENSED",
   "private": true,
   "author": {
@@ -10,29 +10,40 @@
     "url": "http://www.marcuspope.com/"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
     "eslint": "^6.0.1",
     "eslint-config-standard": "^13.0.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
     "jsdom": "^15.1.1",
     "mocha": "^5.2.0",
     "mocha-jsdom": "^2.0.0",
+    "mocha-loader": "^2.0.1",
     "nyc": "^14",
     "sinon": "^7.3.2",
-    "lodash": ">=4.17.13"
+    "lodash": ">=4.17.13",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2"
   },
   "scripts": {
-    "test": "mocha ./test/server.js ./src/**/*-test.js",
-    "test:web": "mocha ./test/web.js ./src/**/*-test.js ./src/**/*-test-web.js",
-    "perf": "mocha --require ./index.js index-test.js ./src/**/*-perf.js",
+    "test": "mocha ./test/node-bootstrap.js ./src/**/*-test.js",
+    "test:web": "mocha ./test/jsdom-bootstrap.js ./src/**/*-test.js ./src/**/*-test-web.js",
+    "perf": "mocha ./test/node-bootstrap.js ./src/**/*-perf.js",
     "coverage": "nyc npm test",
     "coverage:html": "nyc --reporter=html npm test",
     "coverage:web": "nyc npm run test:web",
     "coverage:web:html": "nyc --reporter=html npm run test:web",
     "lint": "eslint src/**",
-    "preflight": "npm run perf && npm run coverage && npm run coverage:web && npm run lint && echo ALL GOOD"
+    "preflight": "npm build && npm run perf && npm run coverage && npm run coverage:web && npm run lint && echo ALL GOOD",
+    "build": "npx webpack",
+    "test:system": "webpack-dev-server --config test/webpack.config.js --open"
   },
   "dependencies": {
     "uuid": "^3.3.2"
