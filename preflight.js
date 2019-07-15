@@ -2,6 +2,9 @@ require('./index');
 
 // Enforce pre-commit checks via this script and report to console
 
+// @TODO: Grep for AT-COMMIT and error out with their messages printed to console
+  // @: These are useful for writing todos about the work in progress that need to be fixed before committing.
+
 // @TODO: ask for a commit message based on this standard: https://www.conventionalcommits.org/en/v1.0.0-beta.4/
   // @: If `BREAKING CHANGE` exists in the message, bump the Major version
   // @: Use the previous git commit version so that preflight failures don't keep bumping the number)

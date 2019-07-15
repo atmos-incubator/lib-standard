@@ -44,7 +44,5 @@ describe('Prototypes', () => {
 
     Object.proto.prop(String.prototype, 'noOverWrite', 'changeFail');
     assert.equal(''.noOverWrite, noop);
-
-    alert(Object.proto.fnKeys(String.prototype));
   });
 });
