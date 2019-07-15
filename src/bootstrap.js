@@ -30,9 +30,14 @@
   require('./math');
 
   // Allow scalar prototypes to be applied to each index of an array
-  Object.proto.toArray(String.prototype);
-  Object.proto.toArray(Number.prototype);
-  Object.proto.toArray(Date.prototype);
+  Object.proto.parlay(String.prototype, Array.prototype);
+  Object.proto.parlay(Number.prototype, Array.prototype);
+  Object.proto.parlay(Date.prototype, Array.prototype);
+
+  // Allow for numbers/strings, numbers/dates to be respectively interchangeable
+  Object.proto.parlay(String.prototype, Number.prototype);
+  Object.proto.parlay(Number.prototype, String.prototype);
+  Object.proto.parlay(Number.prototype, Date.prototype);
 
   // @SECTION: Support for basic lifecycle event subscriptions.
 

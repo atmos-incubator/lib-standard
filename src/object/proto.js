@@ -6,7 +6,6 @@
 
   // @TODO: generate associated helpers for scalar-based extensions.
   // @: for String.prototype mods, default an Array.prototype mod for `{str}Any`, `{str}All` etc that applies logic to each entry
-  // @: for String.prototype mods, default a Number.prototype mod that converts `this.toString()` first
 
   Object.proto = (protoArr, str, fn) => {
     // @DOC: Define a function property on the given list of prototype instances
@@ -19,7 +18,7 @@
       protoArr = defaultProtos;
     }
 
-    if (!protoArr.length) {
+    if (!isa(protoArr, 'array')) {
       protoArr = [protoArr];
     }
 
@@ -43,20 +42,19 @@
       Object.defineProperty(protoArr[i], str, {
         value: fn,
         writable: true,
-        enumerable: protoArr[i] === Standard.prototype
+        enumerable: false
       });
 
-      // define an array-op property if not already defined
-      if (protoArr[i] === String.prototype && !has(Array.prototype, str)) {
-        Object.defineProperty(Array.prototype, str, {
-          value: function(...args) {
-            return this.ea(v => {
-              return v != null ? fn.apply(String(v), args) : v;
-            });
-          },
-          writable: true,
-          enumerable: protoArr[i] === Standard.prototype
-        });
+      switch (protoArr[i]) {
+        case String.prototype:
+        case Number.prototype:
+          Object.proto.parlay(protoArr[i], Array.prototype, str);
+        // eslint-disable-next-line
+        case String.prototype:
+          Object.proto.parlay(protoArr[i], Number.prototype, str);
+        // eslint-disable-next-line
+        case Number.prototype:
+          Object.proto.parlay(protoArr[i], String.prototype, str);
       }
     }
   };
@@ -91,33 +89,62 @@
     }
   };
 
-  Object.proto.toArray = proto => {
-    // @DOC: Object.proto.array(String.prototype) allows for the application of all String prototype functions to the
-    // Array prototype.
-    // @EG: ['asdf ', 'qwer '].trim() returns ['asdf', 'qwer']
-
+  Object.proto.fnKeys = proto => {
     // @NOTE: Patching these properties will cause issues, so we block them.
-    var ignores = ['valueOf', 'toJSON'];
-
-    ea(Object.getOwnPropertyNames(Array.prototype), v => {
-      if (isa(Array.prototype[v], 'function')) {
-        ignores.push(v);
+    var ignores =
+      'toJSON valueOf toString toLocaleString toPrimitive constructor';
+    return ea(Object.getOwnPropertyNames(proto), v => {
+      if (!ignores.includes(v) && isa(proto[v], 'function')) {
+        return v;
       }
     });
+  };
 
-    ea(Object.getOwnPropertyNames(proto), key => {
-      // For every known function on that proto...
-      if (!isa(proto[key], 'function')) return;
+  Object.proto.parlay = (sourceProto, targetProto, property) => {
+    // @DOC: This transfers all functions (or just `property`) from the source to target prototypes.
+    var ignores = Object.proto.fnKeys(targetProto);
 
-      // ...that isn't already defined on the destination.
+    // @TODO: targetProto === Object.prototype ? { <property>Val: () => ea(prop), <property>Key: () => ea(prop) }
+    var handler =
+      targetProto === Array.prototype
+        ? key =>
+            function(...args) {
+              return this.ea(v => {
+                // @NOTE: Coerce the value into a type the prototype extension can handle.
+                return v != null
+                  ? sourceProto[key].apply(sourceProto.constructor(v), args)
+                  : v;
+              });
+            }
+        : key =>
+            function(...args) {
+              // @NOTE: Coerce the value into a type the prototype extension can handle.
+              return targetProto.constructor(
+                sourceProto[key].apply(sourceProto.constructor(this), args)
+              );
+            };
+
+    if (property) {
+      if (ignores.includes(property)) return;
+      return Object.proto.prop(targetProto, property, handler(property));
+    }
+
+    ea(Object.proto.fnKeys(sourceProto), key => {
+      // Don't overwrite existing Array.prototype functions
       if (ignores.includes(key)) return;
+      Object.proto.prop(targetProto, key, handler(key));
+    });
+  };
 
-      Object.proto(Array.prototype, key, function(...args) {
-        return this.ea(v => {
-          // @NOTE: The constructor coerces the value into a type the prototype extension can handle.
-          return v != null ? proto[key].apply(proto.constructor(v), args) : v;
-        });
-      });
+  Object.proto.prop = (proto, key, fn, force) => {
+    // require force parameter to overwrite existing property
+    if (proto[key] && !force) return;
+
+    Object.defineProperty(proto, key, {
+      // @TODO: provide a custom toString() for easier debugging
+      value: fn,
+      writable: true,
+      enumerable: false
     });
   };
 
