@@ -8,7 +8,7 @@
   Object.proto(Error.prototype, 'die', function(extra) {
     // @DOC: Produce a stack trace as though it were from the caller function.
     error('\nERROR:', this.message, '\n\n');
-    error(process.getStack(2));
+    error(Error.getStack(2));
     error('');
     error('Details:');
     error('       #: ', this.errno);
@@ -19,7 +19,7 @@
     die();
   });
 
-  process.getStack = (skip = 1) => {
+  Error.getStack = (skip = 1) => {
     // @DOC: Returns a stacktrace formatted as though it were triggered {skip} calls before here.
     return new Error().stack
       .lines()

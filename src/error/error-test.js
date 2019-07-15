@@ -12,8 +12,10 @@ describe('Errors', () => {
   });
 
   it('can show a stack trace', () => {
+    if (!global.workingSourceMaps) return;
+
     // @NOTE: the line number needs to match the actual line number of this file.
-    assert.includes(process.getStack().lines()[0], 'error-test.js:16');
+    assert.includes(Error.getStack().lines()[0], 'error-test.js:18');
   });
 
   it('can detonate errors', () => {
