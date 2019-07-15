@@ -18,6 +18,9 @@
     if (any === undefined) return 'undefined';
     if (any === nil) return 'nil';
 
+    // @NOTE: This normalizes 'window vs object' difference across stacks
+    if (any === global) return 'object';
+
     return Object.getConstructor(any).name.toLowerCase();
   };
 
