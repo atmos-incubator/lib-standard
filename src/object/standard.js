@@ -45,7 +45,6 @@
       [
         Array.prototype,
         Number.prototype,
-        BigInt.prototype,
         String.prototype,
         Boolean.prototype,
         Date.prototype,
@@ -121,7 +120,7 @@
         return Standard.features[key].bind(self);
       }
 
-      return nil;
+      return undefined;
     }
   };
 

@@ -9,7 +9,7 @@ describe('Iteration Proxy', () => {
   });
 
   it('should allow ea on objects and arrays', () => {
-    assert(ea({})[(0, 1, 2)].ea);
+    assert(ea({}).ea);
     assert([0, 1, 2].ea);
   });
 
