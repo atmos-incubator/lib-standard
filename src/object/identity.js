@@ -55,8 +55,9 @@
     }).or();
   };
 
+  const hop = Object.prototype.hasOwnProperty;
   global.has = function(obj, key) {
-    return obj && obj.hasOwnProperty && obj.hasOwnProperty(key);
+    return obj != null && hop.call(obj, key);
   };
 
   Object.isPrototype = function(obj) {
