@@ -280,7 +280,7 @@
       typeof obj === 'object' &&
       (!obj.ea || obj.ea.eaFnId !== eaFnId)
     ) {
-      obj = eaProxy(obj);
+      obj = Standard.proxy(obj);
     }
 
     // just proxy don't iterate

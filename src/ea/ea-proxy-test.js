@@ -46,10 +46,6 @@ describe('Iteration Proxy', () => {
     assert.similar(ea(2, v => v).or(20), [0, 1]);
   });
 
-  it('declares standard', () => {
-    assert(global.Standard);
-  });
-
   it('Does not corrupt instanceOf for common native objects', () => {
     assert(ea({}) instanceof Object);
     assert(ea([]) instanceof Array);

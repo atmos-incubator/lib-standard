@@ -33,7 +33,6 @@ module.exports = {
     log: 'readonly',
     error: 'readonly',
     warn: 'readonly',
-    eaProxy: 'readonly',
     nil: 'readonly',
     def: 'readonly',
     has: 'readonly',
