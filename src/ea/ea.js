@@ -160,9 +160,9 @@
                     obj[e.k] = e.v;
                   } else {
                     if (e.right) {
-                      obj = { ...obj, ...e.response };
+                      Object.assign(obj, e.response);
                     } else {
-                      obj = { ...e.response, ...obj };
+                      obj = Object.assign(e.response, obj);
                     }
                   }
                 } else if (e.join === true) {
