@@ -1,7 +1,6 @@
 (function() {
   // @DOC: Assertion extensions that make for easier testing
 
-  // @TODO: this needs a client-side polyfill
   global.assert = require('assert');
 
   // @CONSIDER: Should assert(nil) throw?
