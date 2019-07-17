@@ -14,6 +14,7 @@ describe('ea() Performance', () => {
   });
 
   it('10 million ea() loops should be less than a second', function() {
+    this.retries(3);
     this.timeout(1000);
     ea(Math.DREVIL * 10, noop);
   });
