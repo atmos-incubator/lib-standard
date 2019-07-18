@@ -6,7 +6,7 @@ require('./index');
   // @: These are useful for writing todos about the work in progress that need to be fixed before committing.
 
 // @TODO: ask for a commit message based on this standard: https://www.conventionalcommits.org/en/v1.0.0-beta.4/
-  // @: If `BREAKING CHANGE` exists in the message, bump the Major version
+  // @: If `BREAKING CHANGE` exists in the message, bump the Major version (UNLESS! the version is less than 1.0.0 at which point it is ok to change the API)
   // @: Use the previous git commit version so that preflight failures don't keep bumping the number)
   // @: If msg starts with 'fix:' bump the PATCH.
   // @: If msg starts with 'feat:' bump the MINOR.

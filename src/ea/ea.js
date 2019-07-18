@@ -40,7 +40,7 @@
         fn = noop;
       }
 
-      concurrent = concurrent != null ? concurrent : 1;
+      concurrent = concurrent || 1;
 
       if (asyncFn) {
         if (asyncFn === true) {
@@ -76,6 +76,7 @@
                 const handler = function(res) {
                   count++;
 
+                  // @TODO: implement skip handling for async operations
                   // if (skip && skip--) return;
                   if (stop) {
                     return;
@@ -245,7 +246,10 @@
     },
     or: function(any) {
       // Allows for `ea(any).or(false)` to return false when nothing is found in the any.ea iteration
+      // @TODO: Refactor ea() to return a very special [] that always .or()s to any when empty, but otherwise [].or(false) should be [];
+      // @: This would allow for (3).ea(v => { if (v === 2) ea.exit([]); }).or(false) === [];
       if (isa(this, 'array') && this.length === 0) return any;
+      if (isa(this, 'object') && Object.keys(this).length === 0) return any;
       return this.valueOf();
     },
     has: function(any) {
@@ -260,9 +264,14 @@
   global.ea = function(obj, fn, asyncFn, concurrent) {
     // @DOC: `ea(obj, fn)` provides iteration on objects that may not be proxied or proto patched.
 
-    assert(arguments.length > 0, 'Missing required object parameter to ea()');
+    // @NOTE: These checks are designed to improve performance of ea().  Adjust cautiously.
+    if (obj === null) return nil;
+    if (obj === undefined) return undef;
 
-    if (obj == null) return obj;
+    const isProxy = obj.isProxy;
+    const args = arguments.length;
+
+    if (isProxy && args === 1) return obj;
 
     if (Object.isPrototype(obj)) {
       return Object.keys(obj).ea(
@@ -284,7 +293,7 @@
     }
 
     // just proxy don't iterate
-    if (arguments.length == 1) {
+    if (args == 1) {
       return obj;
     }
 

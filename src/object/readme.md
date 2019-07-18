@@ -1,17 +1,25 @@
-# Object Prototype Extensions
+# Standard Object
 
-@TODO: Update these notes based on the new Proxy design and global.VERBOTEN flag
+Standard objects are proxied objects with helpers that normalize access to Standard.features without affecting the Object.prototype or compromising access to the original object being wrapped.
 
-Base prototype extensions are a controversial subject. Lib/Standard purposely tries to make as little of a splash as it can, while obtaining the full benefits of prototype extensions for other data types. Under normal conditions no modifications are made. However you can selectively opt into this architecture by calling `ea(Object.prototype)`.
+Standard objects can even represent undefined and null.
 
-Activating Object.prototype extensions has some considerations to managed as follows:
+## VERBOTEN Mode
 
-1. Avoid common word property names, particularly noun-based names.
+If you are aware of the practical concerns with Object.prototype extensions then you can enable a more efficient mode via the `global.VERBOTEN` flag.
 
-2. Verb-based property names tend to denote an action and avoid namespace conflicts with noun-based properties of an object.
+Activating Object.prototype extensions has the following consideration to manage:
 
-3. Because window is global and an object, all prototype extensions should handle a global use of the function - meaning a `this === global` check and appropriate parameter shifts where `this` is passed in as the first argument.
+1. Avoid common word property names, particularly noun-based names to avoid namespace eclipsing. Verb-based property names tend to denote an action and better avoid namespace conflicts with noun-based properties of an object[^1].
 
-   * @TODO: the above won't matter after Standard.features are auto-promoted to a global property to programmatically does the argument shifting.
+1. Use `Object.create(null)` for property maps.  If you are relying on an object to have an existing key to determine logic, ensure you use `Object.hasOwnProperty` to check for a local-only key or use `Object.create(null)` which will not inherit from the `Object.prototype`.
 
-When checking for property access on an object not created from null (`Object.create(null)`) you should use `.hasOwnProperty()` or `.has()` to avoid a false-positive prototype lookup via `obj[key]`.
+1. Be very careful when defining custom properties *directly* on the Object.prototype.  Standard.ize() uses a few tricks to make global access to that extension operable without infinite recursion.
+
+## Architecture Notes
+
+Properties that are attached to Standard objects are not implicitly wrapped so that each extension can dictate whether it wants to preserve access to the original object.
+
+## Footnotes
+
+[^1]: Some nouns are also verbs, English is funny. When in doubt, just use a variation of toNoun() or nounify().

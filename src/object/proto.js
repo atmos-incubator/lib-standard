@@ -111,9 +111,9 @@
             function(...args) {
               return this.ea(v => {
                 // @NOTE: Coerce the value into a type the prototype extension can handle.
-                return v != null
-                  ? sourceProto[key].apply(sourceProto.constructor(v), args)
-                  : v;
+                return isa(v, null)
+                  ? null
+                  : sourceProto[key].apply(sourceProto.constructor(v), args);
               });
             }
         : key =>

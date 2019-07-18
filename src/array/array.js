@@ -70,7 +70,7 @@
   });
 
   Object.proto(AP, 'last', function(n) {
-    if (n != null) {
+    if (!isa(n, null)) {
       return this.slice(this.length - n);
     } else {
       return this[this.length - 1];

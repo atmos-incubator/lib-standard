@@ -7,8 +7,11 @@
     Math.random = function(min, max) {
       // Produces a random number between the range (min) and (max) inclusive
       // default: min = 0, max = 1
-      if (max != null) {
+      // If only min is provided, Number.MAX_SAFE_INTEGER is assumed for max
+      if (!isa(max, null)) {
         return Math.floor(o() * (max - min + 1)) + min;
+      } else if (!isa(min, null)) {
+        return Math.random(min, Number.MAX_SAFE_INTEGER);
       } else {
         return o();
       }

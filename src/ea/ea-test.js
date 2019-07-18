@@ -238,4 +238,26 @@ describe('Iteration', function() {
       }
     );
   });
+
+  it('ea().or() offers a functional interface to an || like operator', () => {
+    // .or returns a scalar if defined
+    assert.bad((0).or(true));
+    assert.bad(false.or(true));
+    assert.bad(''.or(true));
+
+    assert(ea(undefined).or(true));
+    assert(ea(null).or(true));
+    assert(true.or(false));
+    assert.equal(ea(nil).or(1), 1);
+
+    // .or() treats empty arrays and objects as undefined to support empty object iteration
+    // @NOTE: For now I normalized the interface between [].or and {}.or. But this will change when the todo in
+    // Standard.features.or() is fixed.
+    assert.bad([].or(false));
+    assert.bad(ea({}).or(false));
+
+    // .or() treats populated arrays and objects as defined
+    assert([0].or(false));
+    assert(ea({ hi: 'there' }).or(false));
+  });
 });

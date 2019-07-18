@@ -37,8 +37,8 @@ module.exports = {
     def: 'readonly',
     has: 'readonly',
     die: 'readonly',
-    isScalar: 'readonly',
     toss: 'readonly',
+    undef: 'readonly',
 
     //es20xx
     Atomics: 'readonly',

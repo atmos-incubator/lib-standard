@@ -24,7 +24,7 @@ module.exports = win => {
     }
 
     // Handle argument shifting
-    if (itr == null && scope && itrTypes[isa(scope)]) {
+    if (!itr && scope && itrTypes[isa(scope)]) {
       itr = scope;
       scope = null;
     }
@@ -34,7 +34,7 @@ module.exports = win => {
       scope = win.document;
     }
 
-    if (itr == null) {
+    if (!itr) {
       return scope.querySelector(selector) || nil;
     }
 

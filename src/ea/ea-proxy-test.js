@@ -37,8 +37,8 @@ describe('Iteration Proxy', () => {
     assert.ok(ea({ hi: 'there' }).ea, 'missing chain ea iterator');
   });
 
-  it('should throw on no args', () => {
-    assert.throws(() => ea(), assert.AssertionError);
+  it('should return undef on no args', () => {
+    assert.equal(ea(), undef);
   });
 
   it('should allow for or-ing a truthy value when empty array result', () => {

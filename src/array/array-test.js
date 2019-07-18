@@ -12,6 +12,17 @@ describe('Arrays', () => {
     assert.equal([0, 1, 2].last(), 2);
   });
 
+  it('handles nil cascade', () => {
+    const a = ['a', 'b', 'c', 'd', 'e'];
+    assert.similar([0, undefined, 2, 3, 4].ea(v => a.last(v)), [
+      [],
+      'e',
+      ['d', 'e'],
+      ['c', 'd', 'e'],
+      ['b', 'c', 'd', 'e']
+    ]);
+  });
+
   it('[...].random() returns a random entry', () => {
     assert.ok([0, 1, 2].random().toString());
   });

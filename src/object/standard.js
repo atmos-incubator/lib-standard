@@ -116,7 +116,6 @@
 
       if (Standard.features.hasOwnProperty(key)) {
         // @TODO: use a custom .bind() that preserves toString of functions
-        // @CONSIDER: ea(self) here, but it threw errors so investigate
         return Standard.features[key].bind(self);
       }
 

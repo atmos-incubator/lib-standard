@@ -14,6 +14,8 @@
       // @DOC: creates a visually formatted json-esque serialization of any JavaScript object, including functions and
       // dates. It also preserves `String('foo')` and `Number(42)`. `maxDepth` controls how deep to recurse with -1
       // (default) being infinite.
+      // @TODO: Extract these internal params from arguments object as local vars to clarify that they are not public interfacing
+      // @TODO: Check for a fourth `recurse` param === true (and pass it in as such) to throw an error when recurse is undefined and arguments exist after arguments[1]
       // @NOTE: `offset`, `depth` and `scalar` are internal params used by the recursion algorithm.
       var data = this;
 
@@ -48,17 +50,14 @@
         default:
           ea(data, function(v, k) {
             try {
-              var val =
-                v === null
-                  ? 'null'
-                  : v === undefined
-                  ? 'undefined'
-                  : ea(v).stringify(
-                      maxDepth,
-                      nextOff,
-                      nextDepth,
-                      v.toString() === v
-                    );
+              var val = isa(v, null)
+                ? v.valueOf()
+                : ea(v).stringify(
+                    maxDepth,
+                    nextOff,
+                    nextDepth,
+                    v.toString() === v
+                  );
             } catch (e) {
               val = '"[UNQUERYABLE OBJECT]"';
             }
@@ -84,10 +83,8 @@
           ea(data, v => {
             try {
               array.push(
-                v === null
-                  ? 'null'
-                  : v === undefined
-                  ? 'undefined'
+                isa(v, null)
+                  ? v.valueOf() + ''
                   : v.stringify(
                       maxDepth,
                       nextOff,
@@ -122,7 +119,6 @@
 
     clone: function(merge) {
       // creates a value copy of an object
-      // @TODO: When the issue in ea.js#265 is resolved this can be `this` instead of `ea(this)`
       var res = ea(this)
         .stringify()
         .parse();
