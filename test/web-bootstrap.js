@@ -23,6 +23,7 @@ after(() => {
     })
   })
     .then(res => res.text())
+    .catch(e => console.log('Error communicating with server: ', e))
     .then(res => {
       if (res === 'close') {
         open(location, '_self').close();

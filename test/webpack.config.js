@@ -17,11 +17,22 @@ const testConfig = Object.assign({}, baseConfig, {
     before: app => {
       app.post('/results', bodyParser.json(), function(req, res) {
         // Passing = 100% passing in under 2 seconds
+        // @NOTE: This duration requirement is flexible, but only with good reason
         const pass = req.body.fail === '0' && req.body.dur * 1 < 2;
-        // Based on the results of the test, exit with 0 or 1
-        process.exit(pass ? 0 : 1);
         // Tell the browser to close or remain open for debugging
         res.send(pass ? 'close' : 'hold');
+
+        if (pass) {
+          console.log('All System Tests Passed');
+        } else {
+          console.log(
+            req.body.fail
+              ? req.body.fail + ' System Tests Failed - See Browser For Details'
+              : 'System Tests Took Too Long: ' + req.body.dur
+          );
+        }
+        // Based on the results of the test, exit with 0 or 1
+        process.exit(pass ? 0 : 1);
       });
     }
   }
