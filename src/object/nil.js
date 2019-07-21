@@ -34,7 +34,12 @@
             case 'length':
               return 0;
             case 'isa':
-              return () => str;
+              return function(v) {
+                if (arguments.length === 1) {
+                  return isa(ctx, v);
+                }
+                return str;
+              };
             case 'ea':
               return () => ctx;
             case 'or':
