@@ -66,6 +66,10 @@ describe('NIL / UNDEF Objects', () => {
     it('can be inspected', () => {
       assert.equal(target.isa(), key);
       assert.equal(isa(target), key);
+      assert.truth(target.isa(null));
+      assert.truth(target.isa(target));
+      assert.truth(target.isa(undef));
+      assert.truth(target.isa(nil));
     });
 
     it('cannot be assigned to', () => {

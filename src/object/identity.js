@@ -43,6 +43,8 @@
     } else {
       switch (str) {
         // @NOTE: nil qualifies as both null and undef just as `null == undefined`
+        case nil:
+        case undef:
         case null:
         case 'null':
         case 'nil':
