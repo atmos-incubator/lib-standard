@@ -113,14 +113,14 @@
                 // @NOTE: Coerce the value into a type the prototype extension can handle.
                 return isa(v, null)
                   ? null
-                  : sourceProto[key].apply(sourceProto.constructor(v), args);
+                  : sourceProto[key].apply(sourceProto.constructor(v.valueOf()), args);
               });
             }
         : key =>
             function(...args) {
               // @NOTE: Coerce the value into a type the prototype extension can handle.
               return targetProto.constructor(
-                sourceProto[key].apply(sourceProto.constructor(this), args)
+                sourceProto[key].apply(sourceProto.constructor(this.valueOf()), args)
               );
             };
 
