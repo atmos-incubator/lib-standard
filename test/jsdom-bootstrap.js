@@ -6,6 +6,7 @@ const jsdom = require('mocha-jsdom');
 // @TODO: Submit a pull request to mocha-jsdom to offer a custom "before" handler as an option parameter
 global.before = fn => {
   fn(() => {
+    // @TODO: Consolidate all of this JSDom patch logic into a lib project for reuse across projects.
     // @NOTE: This handles the mocha test environment where a global _and_ a window (jsdom) exist.
     // @NOTE: it doesn't handle `delete global.prop` because the proxy exists on the global prototype instead of global
     // itself. Proxying global itself is not possible. This bug only affects hybrid mocha-jsdom environments.
