@@ -4,15 +4,14 @@ module.exports = win => {
     // @NOTE: AudioNode, AudioContext, and others might fall outside of this Node.proto chain
     // @NOTE: MDN reports there are other `EventTarget` interfaces, but these were all I could find
     node: win.Node.prototype,
-    window: Object.getPrototypeOf(win),
-    global: Object.getPrototypeOf(global),
+    window: win,
     xhr: win.XMLHttpRequest.prototype
   });
   protos.ea(function(proto) {
     // @DOC: addEventListener and removeEventListener are patched on the window, dom node, and xmlhttprequest objects
     // for runtime reflection and proper closure cleanup on partial DOM removal and window unload()
     // istanbul ignore if
-    if (!proto || !proto.addEventListener) {
+    if (!proto || !proto.addEventListener || proto.addEventListener.patched) {
       return;
     }
 
