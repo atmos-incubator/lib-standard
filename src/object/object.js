@@ -1,8 +1,9 @@
 (function() {
   Object.assign(Standard.features, {
+
     toArray: function() {
-      // @DOC: Converts `arguments` into an array.
-      return [].slice.apply(this);
+      // Converts normal objects into array of tuples
+      return ea(this.valueOf(), (v, k) => [k, v]);
     },
 
     sort: function() {
@@ -22,6 +23,15 @@
 
     toObject: function() {
       return this;
+    },
+
+    slice: function(keys) {
+      return ea(this, (v, k) => {
+        if (keys.includes(k)) {
+          ea.merge(k, v);
+        }
+      });
     }
+
   });
 })();

@@ -1,1 +1,2 @@
-require('./event');
+require('./event.js');
+require('./timers.js');

@@ -48,18 +48,27 @@
 
   // @DOC: `assert.count(n?)` allows for easy call-count verification without the use of spies. `assert.count()`
   // increments a counter and `assert.count(4)` asserts that the internal counter matches 4.
-  var total = 0;
-  global.assert.count = n => {
+  global.assert.count = (n, cmp) => {
     if (n !== undefined) {
-      const tmp = total;
-      total = 0;
-      assert.equal(tmp, n);
+      const tmp = global.assert.count.total;
+      global.assert.count.total = 0;
+      switch (n) {
+        case 'gt':
+          assert(tmp > cmp);
+          break;
+        case 'lt':
+          assert(tmp < cmp);
+          break;
+        default:
+          assert.equal(tmp, n);
+      }
       return true;
     } else {
-      total++;
+      global.assert.count.total++;
     }
-    return total;
+    return global.assert.count.total;
   };
+  global.assert.count.total = 0;
 
   global.assert.truth = b => {
     assert.strictEqual(b, true);

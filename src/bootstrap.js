@@ -1,10 +1,17 @@
 (function(global, window) {
   // @DOC: Lib Standard - a prototype extension library for modern JavaScript development
 
-  /* istanbul ignore next when in server mode */
+  global.isNode =
+    typeof process !== 'undefined' &&
+    typeof process.versions.node !== 'undefined';
+
+  // istanbul ignore next when in server mode
   if (window) {
     // Normalize global access between window and global
     window.global = window;
+    global.isBrowser = !global.isNode && !global.isProxy;
+  } else {
+    global.isBrowser = false;
   }
 
   // @VAR: noop() - no-operation callback handler
@@ -25,9 +32,13 @@
   require('./error');
   require('./array');
   require('./string');
+  require('./regex');
+  require('./number');
+  require('./function');
   require('./event');
   require('./date');
   require('./math');
+  require('./node');
 
   // Allow scalar prototypes to be applied to each index of an array
   Object.proto.parlay(String.prototype, Array.prototype);
@@ -54,7 +65,7 @@
 
   setImmediate(() => global.onInit());
 
-  /* istanbul ignore next because only one side is ever invoked */
+  // istanbul ignore next because only one side is ever invoked
   if (typeof document !== 'undefined') {
     // load window/dom extensions
     require('./window');
@@ -66,8 +77,8 @@
     });
   }
 })(
-  /* istanbul ignore next */
+  // istanbul ignore next
   typeof global !== 'undefined' ? global : null,
-  /* istanbul ignore next */
+  // istanbul ignore next
   typeof window !== 'undefined' ? window : null
 );

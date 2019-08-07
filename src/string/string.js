@@ -58,6 +58,9 @@
       t.pop();
       return t.join(str);
     },
+    between: function(l, r) {
+      return this.after(l).before(r);
+    },
     ltrim: function(str = ' ') {
       return this.indexOf(str) === 0 ? this.after(str) : this.valueOf();
     },
@@ -69,7 +72,12 @@
       return str + this.valueOf();
     },
     suffix: function(str) {
+      // @TODO: Can this be done universally? via fn.proto.valueOf()?
+      if (isa(str, 'function')) str = str();
       return this.valueOf() + str;
+    },
+    toInt: function() {
+      return parseInt(this.valueOf(), 10);
     }
   });
 
@@ -153,5 +161,17 @@
     }
 
     return '';
+  });
+
+  Object.proto(String.prototype, 'dasherize', function() {
+    return (
+      // turn snake_case into snake-case
+      this.replace(RegExp.punctuation, ' ')
+        // turn camelCased into a camel-cased
+        .replace(RegExp.capitals, ' $1')
+        .toLowerCase()
+        .words()
+        .join('-')
+    );
   });
 })();

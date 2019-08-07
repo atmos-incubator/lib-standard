@@ -29,7 +29,10 @@ describe('Iteration Flow Control', () => {
     } catch (e) {
       assert.equal(e.handle(), undefined);
     }
+  });
 
+  it('logs a message when extra info is provided to ea.debug and debugging is on', () => {
+    debug.on = true;
     sandbox.stub(console, 'log');
     try {
       ea.debug('IGNORE THIS');
@@ -37,12 +40,16 @@ describe('Iteration Flow Control', () => {
       assert.equal(e.handle(), undefined);
       assert(console.log.called);
     }
+    debug.on = false;
+  });
 
+  it('does not log a debug message when debugging is on', () => {
     global.debug.on = true;
     try {
       ea.debug();
     } catch (e) {
       assert.equal(e.handle(), undefined);
+      assert(!console.log.called);
     }
     global.debug.on = false;
   });

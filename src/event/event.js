@@ -1,6 +1,6 @@
 (function() {
   // Normalize Event object in node environments
-  /* istanbul ignore next */
+  // istanbul ignore next
   global.Event = global.Event || {};
 
   Event.queue = function(singleInvoke) {

@@ -39,6 +39,16 @@ module.exports = {
     die: 'readonly',
     toss: 'readonly',
     undef: 'readonly',
+    sha: 'readonly',
+    clearTimers: 'readonly',
+    clearTimeouts: 'readonly',
+    clearIntervals: 'readonly',
+    isFullscreen: 'readonly',
+    onFullscreenChange: 'readonly',
+    setFullscreen: 'readonly',
+    isNode: 'readonly',
+    off: 'readonly',
+    on: 'readonly',
 
     //es20xx
     Atomics: 'readonly',

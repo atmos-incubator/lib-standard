@@ -71,7 +71,6 @@ describe('Cloning', () => {
 
   it('can clone stuff', () => {
     const t = { hi: 'there' };
-
     const res = ea(t).clone();
     assert.similar(res, t);
     assert.notEqual(res, t);

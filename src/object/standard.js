@@ -49,7 +49,8 @@
         Boolean.prototype,
         Date.prototype,
         RegExp.prototype,
-        Function.prototype
+        Function.prototype,
+        Error.prototype
       ],
       {
         get: (target, key) => {
@@ -127,13 +128,13 @@
     return new Proxy(obj, standardProxy);
   };
 
-// @TODO: Create a Standard.deepProxy() that implements this:
+  // @TODO: Create a Standard.deepProxy() that implements this:
   // @REF: https://stackoverflow.com/questions/43177855/how-to-create-a-deep-proxy
   // @NOTE: useful for diffing objects, creating reactive views from string templates, and efficient delta save
   // techniques for large objects.
   // @NOTE: Adhere to property definitions of non-writable/non-configurable properties
   // @REF: https://stackoverflow.com/a/48495509
 
-// @TODO: Extend on Standard.deepProxy() to create versioned objects that can diff / patch
+  // @TODO: Extend on Standard.deepProxy() to create versioned objects that can diff / patch
   // @REF: https://stackoverflow.com/questions/40497262/how-to-version-control-an-object/40498130#40498130
 })();

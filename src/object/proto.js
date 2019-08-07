@@ -1,7 +1,8 @@
 (function() {
   var extKB = Object.create(null);
 
-  /* istanbul ignore next @TODO: implement real object prototype extensions parity and invoke a second npm test with flag set to true */
+  // @TODO: implement real object prototype extensions parity and invoke a second npm test with flag set to true
+  // istanbul ignore next
   var defaultProtos = [global.VERBOTEN ? Object.prototype : Standard.features];
 
   // @TODO: generate associated helpers for scalar-based extensions.
@@ -21,6 +22,8 @@
     if (!isa(protoArr, 'array')) {
       protoArr = [protoArr];
     }
+
+    assert(isa(str, 'string'), 'Object.proto() expects second parameter to be a string. Received: ' + typeof str);
 
     Object.proto.checkArrow(fn, protoArr, str);
 
@@ -78,14 +81,18 @@
       protoArr = defaultProtos;
     }
 
-    if (!protoArr.length) {
+    try {
+      // @NOTE: Accessing the .length property on a native prototype like DOMTokenList throws an exception across all modern browsers.
+      if (!protoArr.length) {
+        protoArr = [protoArr];
+      }
+    } catch (e) {
+      // istanbul ignore next because only dom prototypes throw errors
       protoArr = [protoArr];
     }
 
-    for (const proto of protoArr) {
-      for (const [k, fn] of Object.entries(map)) {
-        Object.proto(proto, k, fn);
-      }
+    for (const [k, fn] of Object.entries(map)) {
+      Object.proto(protoArr, k, fn);
     }
   };
 
@@ -113,14 +120,20 @@
                 // @NOTE: Coerce the value into a type the prototype extension can handle.
                 return isa(v, null)
                   ? null
-                  : sourceProto[key].apply(sourceProto.constructor(v.valueOf()), args);
+                  : sourceProto[key].apply(
+                      sourceProto.constructor(v.valueOf()),
+                      args
+                    );
               });
             }
         : key =>
             function(...args) {
               // @NOTE: Coerce the value into a type the prototype extension can handle.
               return targetProto.constructor(
-                sourceProto[key].apply(sourceProto.constructor(this.valueOf()), args)
+                sourceProto[key].apply(
+                  sourceProto.constructor(this.valueOf()),
+                  args
+                )
               );
             };
 
@@ -143,8 +156,7 @@
     Object.defineProperty(proto, key, {
       // @TODO: provide a custom toString() for easier debugging
       value: fn,
-      writable: true,
-      enumerable: false
+      configurable: true
     });
   };
 

@@ -71,4 +71,8 @@ describe('Arrays', () => {
   it("[].removeVal(any) doesn't fail", () => {
     assert.doesNotThrow(() => [].removeVal(2));
   });
+
+  it('Sums arrays', () => {
+    assert.equal([1, 2, 3].sum(), 6);
+  });
 });

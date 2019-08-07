@@ -149,7 +149,7 @@
                 // @TODO: make ea.concat(a) combine arrays
 
                 // @TODO: Allow ea.undef() and ea.exit.undef() to include undefined values in the result so that map
-                // operations are compatible with
+                // operations are compatible with sparse arrays.
                 if (res !== undefined) ary.push(res);
               } catch (e) {
                 if (e.merge === true) {
@@ -261,35 +261,47 @@
     }
   });
 
+  const hop = {}.hasOwnProperty;
+
   global.ea = function(obj, fn, asyncFn, concurrent) {
     // @DOC: `ea(obj, fn)` provides iteration on objects that may not be proxied or proto patched.
+    // @NOTE: Performance of ea() is sensitive to changes.  Adjust cautiously.
 
-    // @NOTE: These checks are designed to improve performance of ea().  Adjust cautiously.
     if (obj === null) return nil;
     if (obj === undefined) return undef;
 
-    const isProxy = obj.isProxy;
     const args = arguments.length;
 
-    if (isProxy && args === 1) return obj;
+    if (typeof obj === 'object') {
+      // @NOTE: Accessing isProxy on non-objects is expensive
+      const isProxy = obj.isProxy;
 
-    if (Object.isPrototype(obj)) {
-      return Object.keys(obj).ea(
-        (v, ...args) => {
-          return fn.apply(obj, [v, ...args]);
-        },
-        asyncFn,
-        concurrent
-      );
-    }
+      if (isProxy && args === 1) return obj;
 
-    // proxy the object if necessary
-    if (
-      !obj.isProxy &&
-      typeof obj === 'object' &&
-      (!obj.ea || obj.ea.eaFnId !== eaFnId)
-    ) {
-      obj = Standard.proxy(obj);
+      if (Object.isPrototype(obj) && args > 1) {
+        // Allow iteration over a prototype object
+        return Object.keys(obj).ea(
+          (v, ...args) => {
+            return fn.apply(obj, [v, ...args]);
+          },
+          asyncFn,
+          concurrent
+        );
+      }
+
+      // Handle ea(arguments) like a boss
+      if (
+        args === 1 &&
+        hop.call(obj, 'length') &&
+        Object.getPrototypeOf(obj) === Object.prototype
+      ) {
+        return [].slice.apply(obj);
+      }
+
+      // proxy the object if necessary
+      if (!isProxy && (!obj.ea || obj.ea.eaFnId !== eaFnId)) {
+        obj = Standard.proxy(obj);
+      }
     }
 
     // just proxy don't iterate

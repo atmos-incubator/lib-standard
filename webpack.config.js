@@ -11,6 +11,10 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [new CleanWebpackPlugin()],
+  externals: [
+    // @NOTE: do not send 1mb of polyfills sent to the browser
+    'crypto'
+  ],
   module: {
     rules: [
       {

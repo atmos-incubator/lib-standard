@@ -25,14 +25,18 @@ const testConfig = Object.assign({}, baseConfig, {
         if (pass) {
           console.log('All System Tests Passed');
         } else {
-          console.log(
+          console.error(
             req.body.fail
               ? req.body.fail + ' System Tests Failed - See Browser For Details'
               : 'System Tests Took Too Long: ' + req.body.dur
           );
         }
-        // Based on the results of the test, exit with 0 or 1
-        process.exit(pass ? 0 : 1);
+
+        // Give the browser a sec to process the close command
+        setTimeout(() => {
+          // Based on the results of the test, exit with 0 or 1
+          process.exit(pass ? 0 : 1);
+        }, 1000);
       });
     }
   }
@@ -42,7 +46,8 @@ testConfig.module.rules.push(
   {
     // https://webpack.js.org/loaders/mocha-loader/#root
     // @NOTE: Generate mocha bindings for test files and the `test/common.js` bootstrap
-    test: /(test[\\/]common\.js|src.*?-(test|test-web)\.js)$/,
+    // @TODO: Convert test file naming strategy to test|test-dom|test-web
+    test: /(test[\\/]common\.js|src.*?-(test|test-web|test-browser)\.js)$/,
     exclude: /node_modules/,
     use: {
       loader: 'mocha-loader'

@@ -96,12 +96,6 @@
     );
   };
 
-  /*
-  const isEOSColon = function(c, prv) {
-    return c == ":" && !prv.isNumeric();
-  };
-  */
-
   const isNL = (String.isNL = function(c) {
     return c == '\n' || c == '\r' || c == '\r\n';
   });

@@ -1,3 +1,4 @@
+// istanbul ignore file
 require('./common.js');
 const jsdom = require('mocha-jsdom');
 
@@ -26,6 +27,41 @@ global.before = fn => {
       )
     );
     require('../src/bootstrap.js');
+
+    // @FIX: JSDom doesn't support offset* properties ootb.  This is not to spec, but solves basic testing considerations.
+    Object.defineProperties(window.HTMLElement.prototype, {
+      offsetLeft: {
+        get: function() {
+          return parseFloat(window.getComputedStyle(this).marginLeft) || 0;
+        }
+      },
+      offsetTop: {
+        get: function() {
+          return parseFloat(window.getComputedStyle(this).marginTop) || 0;
+        }
+      },
+      offsetHeight: {
+        get: function() {
+          return parseFloat(window.getComputedStyle(this).height) || 0;
+        }
+      },
+      offsetWidth: {
+        get: function() {
+          return parseFloat(window.getComputedStyle(this).width) || 0;
+        }
+      }
+    });
+
+    // @NOTE: This is not a spec'd substitution for innerText, just helps test coverage
+    // @REF: https://github.com/jsdom/jsdom/issues/1245
+    Object.defineProperties(window.Node.prototype, {
+      innerText: {
+        get: function() {
+          return this.textContent;
+        }
+      }
+    });
+
     // @NOTE: because jsdom is already loaded, the usual onload event hooks never fire in the bootstrap.
     onLoad();
   });

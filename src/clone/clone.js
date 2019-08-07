@@ -139,14 +139,15 @@
     var res;
 
     const clearVar = id => {
-      // @NOTE: This fixes a bug in the global/window proxy in mocha:web environments
+      // @NOTE: This fixes a bug in the global/window proxy in mocha:jsdom environments
       global[id] = undefined;
       delete global[id];
       return id;
     };
 
     if (this.length) {
-      const tmpId = clearVar(guid().split('-')[0]);
+      // @TODO: Extract into utility function
+      const tmpId = clearVar('a' + guid().split('-')[0]);
       try {
         const evil = eval;
         evil('global["' + tmpId + '"] = ' + this.valueOf() + ';');

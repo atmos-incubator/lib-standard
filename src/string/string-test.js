@@ -35,6 +35,8 @@ describe('Strings', () => {
 
     assert.equal('test'.beforeLast('t'), 'tes');
     assert.equal('test'.beforeLast('q'), 'test');
+
+    assert.equal('test'.between('t', 't'), 'es');
   });
 
   it('trims', () => {
@@ -52,6 +54,7 @@ describe('Strings', () => {
 
   it('suffix', () => {
     assert.equal('test'.suffix('Asdf'), 'testAsdf');
+    assert.equal('test'.suffix(() => 'Asdf'), 'testAsdf');
   });
 
   it('quietly evals strings', () => {
@@ -100,5 +103,18 @@ describe('Strings', () => {
     assert.equal('test'.from(''), 'test');
     assert.equal('test'.from('q'), '');
     assert.equal('test'.from(1), 'est');
+  });
+
+  it('converts numeric strings to integers', () => {
+    assert.equal('123'.toInt(), 123);
+    assert.equal('0123'.toInt(), 123);
+    assert.equal('4.20'.toInt(), 4);
+    assert.equal('4.9'.toInt(), 4);
+  });
+
+  it('converts strings to dash-separated values', () => {
+    assert.equal('this'.dasherize(), 'this');
+    assert.equal('this is cool'.dasherize(), 'this-is-cool');
+    assert.equal('this.is'.dasherize(), 'this-is');
   });
 });

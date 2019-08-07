@@ -7,7 +7,7 @@
   "settings": {
     "git.ignoreLimitWarning": true,
     "todo-tree.regex": "(@TODO|@FUTURE|@BUG|@todo|@future|@bug)",
-    "todo-tree.excludeGlobs": ["**/*.code-workspace", "**/tmp/*", "**/*.json" ],
+    "todo-tree.excludeGlobs": ["**/*.code-workspace", "**/tmp/*", "**/*.json", "**/node_modules" ],
     "markdownlint.config": {
       "MD003": { "style": "atx" },
       "MD007": { "indent": 2 },

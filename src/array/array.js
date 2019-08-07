@@ -86,4 +86,13 @@
       if (val.length) return val;
     });
   });
+
+  Object.protoMap(AP, {
+    sum: function() {
+      return this.reduce((next, cur) => next + cur);
+    },
+    toArray: function() {
+      return this.valueOf();
+    }
+  });
 })();

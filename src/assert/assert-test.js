@@ -34,6 +34,12 @@ describe('Asserts', () => {
   it('allows for inline count assertions', () => {
     ea(3, () => assert.count());
     assert.count(3);
+
+    ea(3, () => assert.count());
+    assert.count('gt', 2);
+
+    ea(3, () => assert.count());
+    assert.count('lt', 4);
   });
 
   it('asserts strict true', () => {

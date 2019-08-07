@@ -2,7 +2,7 @@
   "name": "@atmos-inc/standard",
   "description": "A standard library for cross-stack JavaScript",
   "main": "index.js",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "license": "UNLICENSED",
   "private": true,
   "author": {
@@ -27,6 +27,8 @@
     "mocha": "^5.2.0",
     "mocha-jsdom": "^2.0.0",
     "mocha-loader": "^2.0.1",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^1.19.1",
     "nyc": "^14",
     "sinon": "^7.3.2",
     "webpack": "^4.35.3",
@@ -34,17 +36,24 @@
     "webpack-dev-server": "^3.7.2"
   },
   "scripts": {
+    "cloc": "cloc --exclude-dir=\"node_modules,coverage,dist\" --exclude-lang=\"Markdown,JSON\" .",
+    "fixlink": "npm link \"@atmos-inc/standard\" && npm link \"@atmos-inc/io\" && npm link \"@atmos-inc/express\"",
+    "postinstall": "npm run fixlink",
     "test": "mocha ./test/node-bootstrap.js ./src/**/*-test.js",
-    "test:web": "mocha ./test/jsdom-bootstrap.js ./src/**/*-test.js ./src/**/*-test-web.js",
-    "perf": "mocha ./test/node-bootstrap.js ./src/**/*-perf.js",
+    "test:dom": "mocha ./test/jsdom-bootstrap.js ./src/**/*-test.js ./src/**/*-test-web.js",
+    "test:web": "webpack-dev-server --config test/webpack.config.js --open",
+    "test:chrome": "webpack-dev-server --config test/webpack.config.js --open chrome",
+    "test:firefox": "webpack-dev-server --config test/webpack.config.js --open firefox",
     "coverage": "nyc npm test",
-    "coverage:html": "nyc --reporter=html npm test",
-    "coverage:web": "nyc npm run test:web",
-    "coverage:web:html": "nyc --reporter=html npm run test:web",
+    "coverage:watch": "nodemon --exec nyc --reporter=lcov --reporter=text npm run coverage",
+    "coverage:dom": "nyc npm run test:dom",
+    "coverage:dom:watch": "nodemon --exec nyc --reporter=lcov --reporter=text npm run coverage:dom",
+    "coverage:dom:html": "nyc --reporter=html npm run test:dom",
+    "perf": "mocha ./test/node-bootstrap.js ./src/**/*-perf.js",
     "lint": "eslint src/**",
-    "preflight": "npm run lint && npm run build && npm run perf && npm run coverage && npm run coverage:web && npm run test:system && echo ALL GOOD",
-    "build": "npx webpack",
-    "test:system": "webpack-dev-server --config test/webpack.config.js --open"
+    "preflight": "npm run lint && npm run build && npm run perf && npm run coverage && npm run coverage:dom && npm run test:web && npm run test:chrome && npm run test:firefox && echo ALL GOOD",
+    "build": "npx webpack --display-modules",
+    "watch": "npx webpack --watch"
   },
   "dependencies": {
     "uuid": "^3.3.2"

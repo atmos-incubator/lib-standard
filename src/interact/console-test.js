@@ -21,10 +21,13 @@ describe('Console Enhancements (hidden due to stubs)', () => {
     assert.equal(console.error.called, true);
   });
 
-  it('debugs stuff only if debugging is on', () => {
+  it('does not log when debug is off', () => {
+    debug.on = false;
     debug('nope');
     assert.equal(console.log.called, false);
+  });
 
+  it('logs stuff when debug is on', () => {
     debug.on = true;
     debug('yep');
     assert.equal(console.log.called, true);

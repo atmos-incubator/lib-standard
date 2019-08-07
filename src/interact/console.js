@@ -22,7 +22,7 @@
   };
 
   global.debug = (...any) => {
-    if (global.debug.hasOwnProperty('on') && global.debug.on === true) {
+    if (global.debug.on === true) {
       console.log.apply(console.log, any);
     }
   };

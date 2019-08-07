@@ -44,7 +44,7 @@
       if (has(this, 'debug')) {
         // allows for auditing logic flow and selectively binding to a debugger
         if (this.extra) {
-          log('DEBUG: ' + this.extra);
+          debug('DEBUG: ' + this.extra);
         }
         if (bool || global.debug.on) {
           // eslint-disable-next-line no-debugger
